@@ -10,11 +10,12 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "client", "src"),
-      "@shared": path.resolve(__dirname, "shared"),
-    },
+      "@": path.resolve(__dirname, "client/src"),
+      "@shared": path.resolve(__dirname, "shared")
+    }
   },
   root: path.resolve(__dirname, "client"),
+  base: "./", // relative paths for Vercel
   build: {
     outDir: path.resolve(__dirname, "dist"),
     emptyOutDir: true,
@@ -29,11 +30,10 @@ export default defineConfig({
       }
     }
   },
-  base: "/",
   server: {
     fs: {
       strict: true,
-      deny: ["**/.*"],
-    },
-  },
+      deny: ["**/.*"]
+    }
+  }
 });
