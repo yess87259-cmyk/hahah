@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Zap } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -30,7 +31,6 @@ export default function Navigation() {
         setActiveSection(currentSection);
       }
 
-      // Handle scroll state for navigation styling
       setIsScrolled(window.scrollY > 50);
     };
 
@@ -48,54 +48,80 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className={`fixed top-0 w-full z-50 modern-nav ${isScrolled ? 'scrolled' : ''}`} data-testid="navigation">
+    <nav 
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        isScrolled 
+          ? 'bg-white/95 backdrop-blur-xl border-b border-gray-200/20 shadow-lg shadow-black/5' 
+          : 'bg-transparent'
+      }`} 
+      data-testid="navigation"
+    >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <div className="text-2xl font-bold modern-brand">
-            <span className="gradient-text-primary">Vizag</span>
-            <span className="gradient-text-blue">Traffic</span>
-            <span className="gradient-text-cyan">Pulse</span>
+          {/* Logo */}
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+              <Zap className="w-6 h-6 text-white" />
+            </div>
+            <div className="text-2xl font-black">
+              <span className={`${isScrolled ? 'text-gray-900' : 'text-white'} transition-colors`}>Vizag</span>
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Traffic</span>
+              <span className={`${isScrolled ? 'text-gray-900' : 'text-white'} transition-colors`}>Pulse</span>
+            </div>
           </div>
           
-          <div className="hidden md:flex space-x-8">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-1">
             {navItems.map((item) => (
-              <button
+              <Button
                 key={item.id}
+                variant="ghost"
                 onClick={() => scrollToSection(item.id)}
-                className={`modern-nav-link ${
-                  activeSection === item.id ? "active" : "text-foreground"
+                className={`relative px-4 py-2 font-medium transition-all duration-200 hover:scale-105 ${
+                  activeSection === item.id 
+                    ? `${isScrolled ? 'text-blue-600' : 'text-white'} bg-white/10` 
+                    : `${isScrolled ? 'text-gray-700 hover:text-blue-600' : 'text-white/80 hover:text-white'}`
                 }`}
                 data-testid={`nav-${item.id}`}
               >
                 {item.label}
-              </button>
+                {activeSection === item.id && (
+                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-blue-600 rounded-full"></div>
+                )}
+              </Button>
             ))}
           </div>
           
-          <button
-            className="md:hidden p-2 modern-menu-toggle"
+          {/* Mobile Menu Button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`md:hidden p-2 ${isScrolled ? 'text-gray-900' : 'text-white'}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             data-testid="mobile-menu-toggle"
           >
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          </Button>
         </div>
         
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden mt-4 modern-mobile-menu p-6">
+          <div className="md:hidden mt-4 p-6 bg-white/95 backdrop-blur-xl rounded-2xl border border-gray-200/20 shadow-2xl animate-fade-in">
             <div className="space-y-2">
               {navItems.map((item) => (
-                <button
+                <Button
                   key={item.id}
+                  variant="ghost"
                   onClick={() => scrollToSection(item.id)}
-                  className={`block w-full text-left py-3 px-4 modern-mobile-link ${
-                    activeSection === item.id ? "active" : "text-foreground"
+                  className={`w-full text-left py-3 px-4 rounded-xl font-medium transition-all duration-200 ${
+                    activeSection === item.id 
+                      ? 'text-blue-600 bg-blue-50' 
+                      : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
                   }`}
                   data-testid={`mobile-nav-${item.id}`}
                 >
                   {item.label}
-                </button>
+                </Button>
               ))}
             </div>
           </div>

@@ -6,48 +6,39 @@
 @tailwind utilities;
 
 :root {
-  /* Modern Dynamic Color System */
-  --background: 280 15% 98%; /* Light purple-gray */
-  --foreground: 280 25% 8%; /* Very dark purple text */
+  /* Modern Clean Color System */
+  --background: 0 0% 100%; /* Pure white */
+  --foreground: 220 13% 9%; /* Very dark blue-gray text */
   --card: 0 0% 100%; /* Pure white cards */
-  --card-foreground: 280 25% 8%; /* Dark purple text */
+  --card-foreground: 220 13% 9%; /* Dark blue-gray text */
   --popover: 0 0% 100%; /* Pure white */
-  --popover-foreground: 280 25% 8%; /* Dark purple text */
+  --popover-foreground: 220 13% 9%; /* Dark blue-gray text */
   
-  /* Primary Colors - Dynamic Purple System */
-  --primary: 280 85% 65%; /* Vibrant purple */
-  --primary-hover: 280 85% 60%; /* Darker purple hover */
+  /* Primary Colors - Modern Blue System */
+  --primary: 221 83% 53%; /* Modern blue */
+  --primary-hover: 221 83% 48%; /* Darker blue hover */
   --primary-foreground: 0 0% 100%; /* White text on purple */
   
-  /* Secondary Colors - Dynamic Teal System */
-  --secondary: 180 85% 65%; /* Vibrant teal */
+  /* Secondary Colors - Modern Gray System */
+  --secondary: 210 40% 98%; /* Light gray */
   --secondary-foreground: 0 0% 100%; /* White text on teal */
   
-  /* Muted Colors - Light purple */
-  --muted: 280 15% 95%; /* Light purple background */
-  --muted-foreground: 280 10% 45%; /* Medium purple for subtle text */
+  /* Muted Colors - Light gray */
+  --muted: 210 40% 98%; /* Light gray background */
+  --muted-foreground: 215 16% 47%; /* Medium gray for subtle text */
   
-  /* Accent Colors - Dynamic Orange System */
-  --accent: 25 85% 65%; /* Vibrant orange */
+  /* Accent Colors - Modern Purple System */
+  --accent: 262 83% 58%; /* Modern purple */
   --accent-foreground: 0 0% 100%; /* White text */
-  
-  /* Modern Color Schemes */
-  --scheme-purple: 280;
-  --scheme-blue: 220;
-  --scheme-teal: 180;
-  --scheme-emerald: 160;
-  --scheme-orange: 25;
-  --scheme-pink: 320;
-  --scheme-indigo: 260;
   
   /* Destructive - Keep functional red */
   --destructive: 0 84% 60%; /* Rose #EF4444 */
   --destructive-foreground: 0 0% 100%;
   
   /* Borders & Inputs */
-  --border: 0 0% 90%; /* Light gray border */
-  --input: 0 0% 98%; /* Very light gray input background */
-  --ring: 0 0% 20%; /* Dark gray focus ring */
+  --border: 214 32% 91%; /* Light gray border */
+  --input: 214 32% 91%; /* Light gray input background */
+  --ring: 221 83% 53%; /* Blue focus ring */
   
   /* Traffic Congestion Colors */
   --traffic-green: 158 64% 52%; /* Emerald #10B981 */
@@ -66,6 +57,10 @@
   --font-sans: "Inter", system-ui, sans-serif;
   --font-serif: Georgia, serif;
   --font-mono: Menlo, monospace;
+  
+  /* Modern Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
   
   /* Custom shadows */
   --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -106,7 +101,7 @@
 
   body {
     @apply font-sans antialiased text-foreground overflow-x-hidden;
-    background: linear-gradient(135deg, 
+    background: linear-gradient(135deg,
       hsl(280, 25%, 95%) 0%, 
       hsl(280, 30%, 92%) 15%, 
       hsl(280, 35%, 90%) 30%, 
@@ -114,10 +109,7 @@
       hsl(280, 25%, 90%) 60%, 
       hsl(280, 20%, 92%) 75%, 
       hsl(280, 25%, 95%) 100%);
-    background-attachment: fixed;
-    min-height: 100vh;
-    animation: purpleGradientShift 25s ease-in-out infinite;
-    font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "pnum" 1, "tnum" 0, "onum" 1, "lnum" 0, "dlig" 1;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -125,152 +117,79 @@
 }
 
 @layer components {
-  .glass-card {
-    background: rgba(255, 255, 255, 1);
-    border: 1px solid hsl(var(--border));
-    box-shadow: var(--shadow-card);
+  /* Modern Animations */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
   }
 
-  .gradient-bg {
-    background: linear-gradient(135deg, 
-      hsl(220, 25%, 98%) 0%, 
-      hsl(220, 20%, 96%) 25%, 
-      hsl(220, 15%, 94%) 50%, 
-      hsl(220, 20%, 96%) 75%, 
-      hsl(220, 25%, 98%) 100%);
-    background-attachment: fixed;
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out;
   }
 
-  .header-gradient {
-    background: linear-gradient(135deg, 
-      hsl(220, 25%, 98%) 0%, 
-      hsl(220, 20%, 96%) 25%, 
-      hsl(220, 15%, 94%) 50%, 
-      hsl(220, 20%, 96%) 75%, 
-      hsl(220, 25%, 98%) 100%);
-    background-attachment: fixed;
-  }
-
-  /* Modern Purple Gradient Backgrounds */
-  .modern-gradient-bg-1 {
-    background: linear-gradient(135deg, 
-      hsl(280, 20%, 96%) 0%, 
-      hsl(280, 25%, 94%) 20%, 
-      hsl(280, 30%, 92%) 40%, 
-      hsl(280, 25%, 90%) 60%, 
-      hsl(280, 20%, 92%) 80%, 
-      hsl(280, 20%, 96%) 100%);
-    background-attachment: fixed;
-    animation: purplePulse 8s ease-in-out infinite;
-  }
-
-  .modern-gradient-bg-2 {
-    background: linear-gradient(135deg, 
-      hsl(280, 25%, 94%) 0%, 
-      hsl(280, 30%, 92%) 20%, 
-      hsl(280, 35%, 90%) 40%, 
-      hsl(280, 30%, 88%) 60%, 
-      hsl(280, 25%, 90%) 80%, 
-      hsl(280, 25%, 94%) 100%);
-    background-attachment: fixed;
-    animation: purplePulse 10s ease-in-out infinite;
-  }
-
-  .modern-gradient-bg-3 {
-    background: linear-gradient(135deg, 
-      hsl(280, 30%, 92%) 0%, 
-      hsl(280, 35%, 90%) 20%, 
-      hsl(280, 40%, 88%) 40%, 
-      hsl(280, 35%, 86%) 60%, 
-      hsl(280, 30%, 88%) 80%, 
-      hsl(280, 30%, 92%) 100%);
-    background-attachment: fixed;
-    animation: purplePulse 12s ease-in-out infinite;
-  }
-
-  .modern-gradient-bg-4 {
-    background: linear-gradient(135deg, 
-      hsl(280, 35%, 90%) 0%, 
-      hsl(280, 40%, 88%) 20%, 
-      hsl(280, 45%, 86%) 40%, 
-      hsl(280, 40%, 84%) 60%, 
-      hsl(280, 35%, 86%) 80%, 
-      hsl(280, 35%, 90%) 100%);
-    background-attachment: fixed;
-    animation: purplePulse 14s ease-in-out infinite;
-  }
-
-  /* Premium Typography System */
-  .font-display {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-  }
-
-  .font-heading {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    line-height: 1.2;
-  }
-
-  .font-body {
-    font-family: 'Inter', sans-serif;
-    font-weight: 400;
-    letter-spacing: 0;
-    line-height: 1.6;
-  }
-
-  .font-mono {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 400;
-    letter-spacing: 0.025em;
-    line-height: 1.5;
-  }
-
-  /* Advanced Text Effects */
-  .text-gradient-primary {
-    background: linear-gradient(135deg, 
-      hsl(var(--primary)) 0%, 
-      hsl(var(--secondary)) 50%, 
-      hsl(var(--accent)) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .animate-gradient-x {
+    animation: gradientX 3s ease infinite;
     background-size: 200% 200%;
-    animation: gradientShift 3s ease-in-out infinite;
   }
 
-  .text-gradient-secondary {
-    background: linear-gradient(135deg, 
-      hsl(280, 85%, 65%) 0%, 
-      hsl(180, 85%, 65%) 50%, 
-      hsl(25, 85%, 65%) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
   }
 
-  .text-shadow-glow {
-    text-shadow: 0 0 20px rgba(139, 92, 246, 0.3),
-                 0 0 40px rgba(139, 92, 246, 0.2),
-                 0 0 60px rgba(139, 92, 246, 0.1);
+  /* Modern Glass Effect */
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
   }
 
-  .text-3d {
-    text-shadow: 
-      0 1px 0 #ccc,
-      0 2px 0 #c9c9c9,
-      0 3px 0 #bbb,
-      0 4px 0 #b9b9b9,
-      0 5px 0 #aaa,
-      0 6px 1px rgba(0,0,0,.1),
-      0 0 5px rgba(0,0,0,.1),
-      0 1px 3px rgba(0,0,0,.3),
-      0 3px 5px rgba(0,0,0,.2),
-      0 5px 10px rgba(0,0,0,.25);
+  /* Modern Card Hover */
+  .card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradientX {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
 
   .text-animated {
     background: linear-gradient(45deg, 

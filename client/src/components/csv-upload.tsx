@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useUploadCSV } from "@/hooks/use-traffic-data";
-import { Upload, FileText, CheckCircle, XCircle, AlertCircle, Info } from "lucide-react";
+import { Upload, FileText, CheckCircle, XCircle, AlertCircle, Info, Cloud, Zap } from "lucide-react";
 
 export default function CSVUpload() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -14,19 +14,15 @@ export default function CSVUpload() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const uploadMutation = useUploadCSV();
 
-  // File validation
   const validateFile = (file: File): { valid: boolean; error?: string } => {
-    // Check file type
     if (!file.name.toLowerCase().endsWith('.csv') && file.type !== 'text/csv' && file.type !== 'application/csv') {
       return { valid: false, error: "Please select a CSV file" };
     }
     
-    // Check file size (50MB limit)
     if (file.size > 50 * 1024 * 1024) {
       return { valid: false, error: "File size must be less than 50MB" };
     }
     
-    // Check if file is empty
     if (file.size === 0) {
       return { valid: false, error: "File cannot be empty" };
     }
@@ -34,7 +30,6 @@ export default function CSVUpload() {
     return { valid: true };
   };
 
-  // Handle drag events
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -45,7 +40,6 @@ export default function CSVUpload() {
     }
   }, []);
 
-  // Handle file drop
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -60,7 +54,6 @@ export default function CSVUpload() {
     }
   }, []);
 
-  // Handle file input change
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -71,18 +64,16 @@ export default function CSVUpload() {
     }
   };
 
-  // Handle file upload
   const handleUpload = async () => {
     if (!selectedFile) return;
     
     setUploadProgress(0);
     
-    // Simulate upload progress
     const progressInterval = setInterval(() => {
       setUploadProgress(prev => {
         if (prev >= 90) {
           clearInterval(progressInterval);
-          return 90; // Stop at 90%, let actual upload complete it
+          return 90;
         }
         return prev + 10;
       });
@@ -91,7 +82,6 @@ export default function CSVUpload() {
     try {
       await uploadMutation.mutateAsync(selectedFile);
       setUploadProgress(100);
-      // Reset after success
       setTimeout(() => {
         setSelectedFile(null);
         setUploadProgress(0);
@@ -105,7 +95,6 @@ export default function CSVUpload() {
     }
   };
 
-  // Clear selection
   const handleClear = () => {
     setSelectedFile(null);
     setUploadProgress(0);
@@ -114,7 +103,6 @@ export default function CSVUpload() {
     }
   };
 
-  // Format file size
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -124,22 +112,24 @@ export default function CSVUpload() {
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto" data-testid="csv-upload-card">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Upload className="w-5 h-5" />
-          Upload CSV File
+    <Card className="w-full max-w-2xl mx-auto bg-white/80 backdrop-blur-sm border-0 shadow-2xl" data-testid="csv-upload-card">
+      <CardHeader className="text-center pb-4">
+        <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+          <Cloud className="w-8 h-8 text-white" />
+        </div>
+        <CardTitle className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+          Upload Traffic Data
         </CardTitle>
-        <CardDescription>
-          Upload your traffic data CSV file for analysis with high-accuracy ML models
+        <CardDescription className="text-gray-600">
+          Upload your CSV file for high-accuracy ML analysis and real-time insights
         </CardDescription>
       </CardHeader>
+      
       <CardContent className="space-y-6">
-        
-        {/* CSV Format Instructions */}
-        <Alert data-testid="format-instructions">
-          <Info className="h-4 w-4" />
-          <AlertDescription>
+        {/* Format Instructions */}
+        <Alert className="border-blue-200 bg-blue-50" data-testid="format-instructions">
+          <Info className="h-4 w-4 text-blue-600" />
+          <AlertDescription className="text-blue-800">
             <strong>Required CSV columns:</strong> Date, Hour, Location, Queue_Density (or Queue), 
             Stop_Density (or StopDensity), Accidents_Reported (or Accidents), Fatalities
           </AlertDescription>
@@ -147,12 +137,12 @@ export default function CSVUpload() {
 
         {/* Upload Area */}
         <div
-          className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-all duration-200 ${
+          className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-300 ${
             dragActive 
-              ? 'border-primary bg-primary/5' 
+              ? 'border-blue-500 bg-blue-50 scale-105' 
               : selectedFile 
-              ? 'border-green-500 bg-green-50 dark:bg-green-950/20' 
-              : 'border-muted-foreground/25 hover:border-muted-foreground/50 hover:bg-muted/20'
+              ? 'border-green-500 bg-green-50' 
+              : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
           }`}
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
@@ -170,45 +160,50 @@ export default function CSVUpload() {
           />
           
           {!selectedFile ? (
-            <>
-              <Upload className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+            <div className="space-y-4">
+              <div className={`w-16 h-16 mx-auto rounded-2xl flex items-center justify-center transition-all duration-300 ${
+                dragActive ? 'bg-blue-600 scale-110' : 'bg-gray-100'
+              }`}>
+                <Upload className={`w-8 h-8 ${dragActive ? 'text-white' : 'text-gray-400'}`} />
+              </div>
               <div className="space-y-2">
-                <p className="text-lg font-medium">
-                  {dragActive ? "Drop your CSV file here" : "Drag and drop your CSV file here"}
+                <p className="text-lg font-semibold text-gray-900">
+                  {dragActive ? "Drop your CSV file here" : "Drag and drop your CSV file"}
                 </p>
-                <p className="text-sm text-muted-foreground">
-                  or <span className="text-primary font-medium">click to browse</span>
+                <p className="text-gray-600">
+                  or <span className="text-blue-600 font-medium cursor-pointer hover:underline">click to browse</span>
                 </p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-gray-500">
                   Maximum file size: 50MB
                 </p>
               </div>
-            </>
+            </div>
           ) : (
             <div className="space-y-4">
-              <div className="flex items-center justify-center gap-3">
-                <FileText className="w-8 h-8 text-green-600" />
+              <div className="flex items-center justify-center gap-4">
+                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                  <FileText className="w-6 h-6 text-green-600" />
+                </div>
                 <div className="text-left">
-                  <p className="font-medium text-green-700 dark:text-green-400" data-testid="selected-filename">
+                  <p className="font-semibold text-green-700" data-testid="selected-filename">
                     {selectedFile.name}
                   </p>
-                  <p className="text-sm text-muted-foreground" data-testid="selected-filesize">
+                  <p className="text-sm text-gray-600" data-testid="selected-filesize">
                     {formatFileSize(selectedFile.size)}
                   </p>
                 </div>
-                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                <Badge className="bg-green-100 text-green-700 border-green-200">
                   Ready
                 </Badge>
               </div>
               
-              {/* Upload Progress */}
               {uploadProgress > 0 && (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span>Upload Progress</span>
-                    <span>{uploadProgress}%</span>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between text-sm font-medium">
+                    <span className="text-gray-700">Upload Progress</span>
+                    <span className="text-blue-600">{uploadProgress}%</span>
                   </div>
-                  <Progress value={uploadProgress} className="h-2" data-testid="upload-progress" />
+                  <Progress value={uploadProgress} className="h-3 bg-gray-200" data-testid="upload-progress" />
                 </div>
               )}
             </div>
@@ -216,63 +211,62 @@ export default function CSVUpload() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3">
-          {selectedFile && (
-            <>
-              <Button
-                onClick={handleUpload}
-                disabled={uploadMutation.isPending || uploadProgress > 0}
-                className="flex-1"
-                data-testid="button-upload"
-              >
-                {uploadMutation.isPending || uploadProgress > 0 ? (
-                  <>
-                    <Upload className="w-4 h-4 mr-2 animate-pulse" />
-                    {uploadProgress < 90 ? "Uploading..." : "Processing..."}
-                  </>
-                ) : (
-                  <>
-                    <Upload className="w-4 h-4 mr-2" />
-                    Upload & Analyze
-                  </>
-                )}
-              </Button>
-              <Button
-                variant="outline"
-                onClick={handleClear}
-                disabled={uploadMutation.isPending || uploadProgress > 0}
-                data-testid="button-clear"
-              >
-                Clear
-              </Button>
-            </>
-          )}
-        </div>
+        {selectedFile && (
+          <div className="flex gap-3">
+            <Button
+              onClick={handleUpload}
+              disabled={uploadMutation.isPending || uploadProgress > 0}
+              className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+              data-testid="button-upload"
+            >
+              {uploadMutation.isPending || uploadProgress > 0 ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  {uploadProgress < 90 ? "Uploading..." : "Processing..."}
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Zap className="w-4 h-4" />
+                  Upload & Analyze
+                </div>
+              )}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleClear}
+              disabled={uploadMutation.isPending || uploadProgress > 0}
+              className="px-6 border-2 border-gray-300 hover:border-red-400 hover:text-red-600 rounded-xl transition-all duration-300"
+              data-testid="button-clear"
+            >
+              Clear
+            </Button>
+          </div>
+        )}
 
         {/* Status Messages */}
         {uploadMutation.isError && (
-          <Alert variant="destructive" data-testid="upload-error">
-            <XCircle className="h-4 w-4" />
-            <AlertDescription>
+          <Alert className="border-red-200 bg-red-50 animate-fade-in" data-testid="upload-error">
+            <XCircle className="h-4 w-4 text-red-600" />
+            <AlertDescription className="text-red-800">
               <strong>Upload failed:</strong> {uploadMutation.error instanceof Error ? uploadMutation.error.message : "Unknown error"}
             </AlertDescription>
           </Alert>
         )}
         
         {uploadMutation.isSuccess && uploadProgress === 100 && (
-          <Alert className="border-green-200 bg-green-50 dark:bg-green-950/20" data-testid="upload-success">
+          <Alert className="border-green-200 bg-green-50 animate-fade-in" data-testid="upload-success">
             <CheckCircle className="h-4 w-4 text-green-600" />
-            <AlertDescription className="text-green-700 dark:text-green-400">
-              <strong>Success!</strong> Your CSV file has been uploaded and is being processed with ML models. 
-              The dashboard will update automatically when analysis is complete.
+            <AlertDescription className="text-green-800">
+              <strong>Success!</strong> Your CSV file has been processed with ML models. 
+              The dashboard will update automatically with new insights.
             </AlertDescription>
           </Alert>
         )}
         
         {uploadMutation.isPending && uploadProgress >= 90 && (
-          <Alert data-testid="processing-status">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
+          <Alert className="border-blue-200 bg-blue-50 animate-fade-in" data-testid="processing-status">
+            <AlertCircle className="h-4 w-4 text-blue-600" />
+            <AlertDescription className="text-blue-800">
               <strong>Processing:</strong> Running high-accuracy Python ML analysis on your data. 
               This may take a few moments...
             </AlertDescription>
